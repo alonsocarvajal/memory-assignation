@@ -1,0 +1,3 @@
+#<Nombre de proceso>;<Tipo de petición>;<Cantidad de KiloBytes o Dirección de memoria>;
+P1;allocate;100
+P2;allocate;200
