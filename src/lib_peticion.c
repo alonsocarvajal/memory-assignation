@@ -67,3 +67,32 @@ lista_peticion insertar_peticion
     p_peticion = NULL;
     return lista;
 }
+
+/* Funcion para calcular el largo de las peticiones */
+int largo_lista_peticiones(lista_peticion lista)
+{
+	int contador = 0;
+	lista_peticion aux;
+
+	for (aux = lista; aux != NULL; aux = aux->sgte, contador++);
+	return contador;
+}
+
+/* Funcion imprimir lista de peticiones */
+void imprimir_peticiones(lista_peticion lista)
+{
+	lista_peticion aux;
+
+	if ( lista == NULL ) {  // Lista vacia
+		puts("---- Lista sin elementos ----");
+	}
+	else {
+		for (aux = lista; aux != NULL; aux = aux->sgte) {
+            printf("---- %s ----\n", aux->nombre_proceso);
+            printf("\tMarca de tiempo\t: %ld\n", aux->marca_de_tiempo);
+            printf("\tTipo de peticion\t: %s\n", aux->tipo_peticion);
+            printf("\tCantidad de memoria requerida\t: %ld\n", aux->cantidad_peticion);
+            putchar('\n');
+		}
+	}
+}
