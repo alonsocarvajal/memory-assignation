@@ -19,17 +19,8 @@ char *obtener_fecha_inicio(void)
     return fecha;
 }
 
-/* Funcion para imprimir el modo de uso */
-void imprimir_uso(int p_bandera, int a_bandera, int c_bandera, int s_bandera, int m_bandera, char *nombre_programa)
-{
-    if (p_bandera == 0 || a_bandera == 0 || c_bandera == 0 || m_bandera == 0) {
-       imprimir_ayuda(nombre_programa);
-       exit(1);  /* Salir del programa */
-    }
-}
-
 /* Funcion para imprimir la ayuda del programa */
-void imprimir_ayuda(char *nombre_programa)
+void imprimir_uso(char *nombre_programa)
 {
     printf( "\nUso %s:\n"
             "-p, --peticiones=NOMBRE_ARCHIVO\t Ingresar NOMBRE_ARCHIVO que contiene las peticiones de memoria\n"
@@ -43,15 +34,16 @@ void imprimir_ayuda(char *nombre_programa)
             nombre_programa);
 }
 
-void obtener_argumentos(Opcion *opciones_del_sistema)
+void obtener_argumentos(Opcion *opciones_del_sistema, int *estado_opcion)
 {
- int    c                   = 0,
+    char regex[14] = ":p:a:c:s: :m:";   /* Expresion Regural utilizada para las opciones del sistema */
+
+    int opcion              = 0,
         p_bandera           = 0,    /* -p, --peticiones <Nombre archivo> */
         a_bandera           = 0,    /* -a, --algoritmo <B|F|N> */
         c_bandera           = 0,    /* -c, --cantidadmemoria <Cantidad de megas> */
-        s_bandera           = 0,    /* -s, --salida <Nombre archivo> (opcional: por defecto usar fecha y hora de ejecucion) */
-        m_bandera           = 0,    /* -m, --modo <H|S> */
-        cantidad_memoria    = 0;
+        //s_bandera           = 0,    /* -s, --salida <Nombre archivo> (opcional: por defecto usar fecha y hora de ejecucion */
+        m_bandera           = 0;    /* -m, --modo <H|S> */
 
     struct option longopts[] =
         {
@@ -63,8 +55,8 @@ void obtener_argumentos(Opcion *opciones_del_sistema)
             {0,0,0,0}
         };
 
-    while ( ( c = getopt_long(opciones_del_sistema->argc, opciones_del_sistema->argv, ":p:a:c:s::m:", longopts, NULL) ) != -1 ) {
-        switch (c) {
+    while ( ( opcion = getopt_long(opciones_del_sistema->argc, opciones_del_sistema->argv, regex, longopts, NULL) ) != -1 ) {
+        switch (opcion) {
         case 'p':   /* -p, --peticiones */
             p_bandera = 1;
             opciones_del_sistema->archivo_peticiones = optarg;
@@ -81,11 +73,11 @@ void obtener_argumentos(Opcion *opciones_del_sistema)
             break;
         case 's':   /* -s, --salida <Nombre archivo> */
             if(optarg != NULL) {
-                s_bandera = 1;
+                //s_bandera = 1;
                 opciones_del_sistema->archivo_salida = optarg;
             }
             else {
-                s_bandera = 0;
+                //s_bandera = 0;
                 opciones_del_sistema->archivo_salida = obtener_fecha_inicio();
             }
             break;
@@ -104,5 +96,12 @@ void obtener_argumentos(Opcion *opciones_del_sistema)
             break;
         }
     }
-    imprimir_uso(p_bandera, a_bandera, c_bandera, s_bandera, m_bandera, opciones_del_sistema->nombre_programa);
+
+    /* Verificando las banderas de las opciones ingresadas. Si alguna bandera
+     * es igual a 0, entonces ocurrio un error.
+     */
+    if (p_bandera == 0 || a_bandera == 0 || c_bandera == 0 || m_bandera == 0) {
+        imprimir_uso(opciones_del_sistema->nombre_programa);
+        *estado_opcion = 1;
+    }
 }

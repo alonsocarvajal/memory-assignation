@@ -11,6 +11,5 @@ typedef struct opcion {
 }Opcion;
 
 extern char *obtener_fecha_inicio(void);
-extern void imprimir_uso(int p_bandera, int a_bandera, int c_bandera, int s_bandera, int m_bandera, char *nombre_programa);
-extern void imprimir_ayuda(char *nombre_programa);
-extern void obtener_argumentos(Opcion *opciones_del_sistema);
+extern void imprimir_uso(char *nombre_programa);
+extern void obtener_argumentos(Opcion *opciones_del_sistema, int *estado_opcion);
