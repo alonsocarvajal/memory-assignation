@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     opciones_del_sistema.argc              = argc;
     opciones_del_sistema.nombre_programa   = argv[0];
 
+
     /* + Si ocurre algun problema con los argumentos, el programa termina aqui.
      * + Cambiar el nombre de la funcion
      * + Agregar una condicional "if" para obtener mayor claridad acerca de
@@ -28,22 +29,22 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    /* Leer peticiones */
+    lista_peticiones = leer_archivo_peticion(lista_peticiones, opciones_del_sistema.archivo_peticiones);
+    imprimir_peticiones(lista_peticiones);
+
     /* Sección para escoger el algoritmo */
 
+
+
     /* Leyendo datos del sistema */
-    printf("Algoritmo = %c\nnom_prog = %s\narc_pet = %s\narc_sal = %s\nmodo = %c\ncan_mem = %lu\n",
+    /*printf("Algoritmo = %c\nnom_prog = %s\narc_pet = %s\narc_sal = %s\nmodo = %c\ncan_mem = %lu\n",
             opciones_del_sistema.algoritmo,
             opciones_del_sistema.nombre_programa,
             opciones_del_sistema.archivo_peticiones,
             opciones_del_sistema.archivo_salida,
             opciones_del_sistema.modo,
             opciones_del_sistema.cantidad_memoria);
-
-    /* Leer peticiones */
-    //lista_peticiones = leer_archivo_peticion(lista_peticiones, "../config/peticiones");
-
-    /*imprimir_peticiones(lista_peticiones);
-    printf("Algoritmo %c\n", opciones_del_sistema.algoritmo);*/
-
+    /**/
     return(EXIT_SUCCESS);
 }
