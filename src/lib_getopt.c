@@ -24,7 +24,7 @@ void imprimir_uso(int p_bandera, int a_bandera, int c_bandera, int s_bandera, in
 {
     if (p_bandera == 0 || a_bandera == 0 || c_bandera == 0 || m_bandera == 0) {
        imprimir_ayuda(nombre_programa);
-       exit(1)  /* Salir del programa */
+       exit(1);  /* Salir del programa */
     }
 }
 
@@ -43,7 +43,7 @@ void imprimir_ayuda(char *nombre_programa)
             nombre_programa);
 }
 
-Opcion *obtener_argumentos(Opcion *opciones_del_sistema)
+void obtener_argumentos(Opcion *opciones_del_sistema)
 {
  int    c                   = 0,
         p_bandera           = 0,    /* -p, --peticiones <Nombre archivo> */
@@ -53,24 +53,17 @@ Opcion *obtener_argumentos(Opcion *opciones_del_sistema)
         m_bandera           = 0,    /* -m, --modo <H|S> */
         cantidad_memoria    = 0;
 
-/*
-    char *nombre_programa = argv[0],
-         *archivo_peticiones,
-         *archivo_salida,
-         algoritmo,
-         modo;
-*/
     struct option longopts[] =
         {
             {"peticiones",          required_argument,  NULL,   'p'},
             {"algoritmo",           required_argument,  NULL,   'a'},
-            {"cantidadmemoria",    required_argument,  NULL,   'c'},
+            {"cantidadmemoria",    required_argument,   NULL,   'c'},
             {"salida",              optional_argument,  NULL,   's'},
             {"modo",                required_argument,  NULL,   'm'},
             {0,0,0,0}
         };
 
-    while ( ( c = getopt_long(argc, argv, ":p:a:c:s::m:", longopts, NULL) ) != -1 ) {
+    while ( ( c = getopt_long(opciones_del_sistema->argc, opciones_del_sistema->argv, ":p:a:c:s::m:", longopts, NULL) ) != -1 ) {
         switch (c) {
         case 'p':   /* -p, --peticiones */
             p_bandera = 1;
@@ -111,7 +104,5 @@ Opcion *obtener_argumentos(Opcion *opciones_del_sistema)
             break;
         }
     }
-
-    imprimir_uso(p_bandera, a_bandera, c_bandera, s_bandera, m_bandera, nombre_programa);
-    return opciones_del_sistema;
+    imprimir_uso(p_bandera, a_bandera, c_bandera, s_bandera, m_bandera, opciones_del_sistema->nombre_programa);
 }
