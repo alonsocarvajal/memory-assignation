@@ -1,0 +1,67 @@
+/*Algorito first fit*/
+lista_memoria first_fit(lista_memoria lista_fragmentos, lista_peticion lista_peticiones)
+{
+    int posicion = 0, tipo_de_peticion = 0, int bandera_libre = 0;
+    lista_memoria aux_frag = NULL;
+    lista_peticion aux_pet = NULL;
+
+
+    /* Recorriendo las peticiones */
+    for (aux_pet = lista_peticiones; aux_pet!= NULL; aux_pet= aux_pet->sgte) {
+        /* Recorriendo los fragmentos de memoria */
+        tipo_de_peticion = obtener_tipo_peticion(aux_pet);
+        for (posicion = 1, aux_frag = lista_fragmentos; aux_frag != NULL; aux_frag = aux_frag->sgte, posicion++) {
+            if (aux_frag->es_libre == 1) {
+                /* Preguntar el tipo de peticion FREE o ALLOCATE */
+                if ( tipo_de_peticion == 0 ){ /* Peticion free */
+                    liberar_fragmento(lista_fragmentos, aux_pet->nombre_proceso, aux_pet->cantidad_peticion);
+                    establecer_rango_memoria(lista_fragmentos);
+                    break;
+                }
+                else if ( tipo_de_peticion == 1 ) {    /* Peticion allocate */
+                    /* Si el primer nodo es libre y posee memoria suficiente */
+                    if ( (posicion == 1) && (aux_frag->tamano_fragmento >= aux_pet->cantidad_peticion) ) {
+                        printf("Insertando principio: %s\n", aux_pet->nombre_proceso);
+                        printf("Tamano fragmento %lu\n", aux_pet->cantidad_peticion);
+                        printf("es libre %d\n", 0);
+                        puts("<<<<<<<<<<<<<<<<<<<");
+                        lista_fragmentos = insertar_fragmento_principio(lista_fragmentos,
+                                                                        aux_pet->nombre_proceso,
+                                                                        aux_pet->cantidad_peticion,
+                                                                        0,
+                                                                        0,
+                                                                        0);
+                        aux_frag->tamano_fragmento = aux_frag->tamano_fragmento - aux_pet->cantidad_peticion;
+                        establecer_rango_memoria(lista_fragmentos);
+                        break;
+                    }
+                    /* Cualquier otro nodo intermedio con memoria suficiente*/
+                    else if (aux_frag->tamano_fragmento >= aux_pet->cantidad_peticion){
+                        printf("Insertando principio: %s\n", aux_pet->nombre_proceso);
+                        printf("Tamano fragmento %lu\n", aux_pet->cantidad_peticion);
+                        printf("es libre %d\n", 0);
+                        puts("##################");
+                        lista_fragmentos = insertar_fragmento_posicion(lista_fragmentos,
+                                                                       aux_pet->nombre_proceso,
+                                                                       posicion,
+                                                                       aux_pet->cantidad_peticion,
+                                                                       0,
+                                                                       0,
+                                                                       0);
+                        aux_frag->tamano_fragmento = aux_frag->tamano_fragmento - aux_pet->cantidad_peticion;
+                        establecer_rango_memoria(lista_fragmentos);
+                        break;
+                    }
+                    /* No hay memoria */
+                    else {
+                        lista_fragmentos = liberar_fragmento()
+
+
+                        printf("No ha memoria disponible");
+                    }
+                }   /* else if ( tipo_de_peticion == 1 ) ... */
+            }   /* if (aux_frag->es_libre == 1) ... */
+        }   /* for (posicion = 1, aux_frag = lista_fragmentos ... */
+    }
+    return lista_fragmentos;
+}

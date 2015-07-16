@@ -85,3 +85,15 @@ void imprimir_peticiones(lista_peticion lista)
 		}
 	}
 }
+
+/* Funcion complemento para determinar el tipo de peticion "Allocate o Free" */
+int obtener_tipo_peticion(lista_peticion peticion)
+{
+    /* Retorna 1 para allocate y 0 para free */
+    if ( strcmp(peticion->tipo_peticion, "allocate") == 0 )
+        return 1;
+    else if ( strcmp(peticion->tipo_peticion, "free") == 0 )
+        return 0;
+    else
+        return -1;  /* Error */
+}
